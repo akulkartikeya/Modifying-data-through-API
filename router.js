@@ -54,8 +54,35 @@ router.delete("/delete/:id",async(req,res)=>{
     } catch (error) {
         return res.status(500).send({message:"Something went wrong",error});  
     }
-})
+});
 
+router.get("/get", async (req, res) => {
+    try {
+        const products = await model.find();
+        return res.status(200).send({ message: "Products fetched successfully", products });
+    } catch (error) {
+        return res.status(500).send({ message: "Something went wrong", error });
+    }
+});
+router.patch("/patch/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.status(401).send({ message: "Please provide id" });
+        }
+
+        const { title, price } = req.body;
+        const updateData = {};
+        if (title) updateData.title = title;
+        if (price) updateData.price = price;
+
+        const update = await model.findOneAndUpdate({ _id: id }, updateData, { new: true });
+        return res.status(200).send({ message: "Product updated successfully", update });
+
+    } catch (error) {
+        return res.status(500).send({ message: "Something went wrong", error });
+    }
+});
 
 
 module.exports = router;

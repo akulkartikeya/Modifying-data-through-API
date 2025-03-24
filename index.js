@@ -21,7 +21,8 @@ app.use("/product",router);
 
 app.listen(8080,async()=>{
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGODB_URL);
+        
         console.log("connected to server successfully")
     } catch (error) {
         console.log(error)
